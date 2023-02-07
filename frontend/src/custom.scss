@@ -1,0 +1,20 @@
+$body-bg: rgb(30, 30, 30);
+$body-color: #fff;
+
+.bg-form {
+  background-color:rgb(60, 60, 60);
+  padding: 2rem 2rem 1rem 2rem;
+  margin: 2rem;
+  border-radius: 1rem;
+}
+
+.bg-form > * {
+  margin: 1rem;
+}
+
+.margin-items > * {
+  margin-bottom: 1rem;
+}
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
