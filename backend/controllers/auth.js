@@ -1,20 +1,34 @@
 const { StatusCodes } = require('http-status-codes')
 const jwt = require('jsonwebtoken')
-const user = require('../models/user')
+const { BadRequestError, UnauthenticatedError } = require('../errors')
+const User = require('../models/user')
 
 const register = async (req, res) => {
-  const { _id: userId, name } = await user.create(req.body)
-
-  const token = jwt.sign({ userId, name }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
+  const user = await User.create(req.body)
+  const token = user.generateJWT()
+  res.status(StatusCodes.CREATED).json({
+    msg: 'Token successfully created.',
+    token,
+    user: { name: user.name },
   })
-  res
-    .status(StatusCodes.CREATED)
-    .json({ msg: 'Token successfully created.', token, user: { name } })
 }
 
 const login = async (req, res) => {
-  res.send('Login')
+  const { email, password } = req.body
+  if (!email || !password) {
+    throw new BadRequestError('Provide email and password.')
+  }
+  const user = await User.findOne({ email })
+  if (!user || !user.checkPassword(password)) {
+    throw new UnauthenticatedError('Bad credentials.')
+  }
+  const token = user.generateJWT()
+
+  res.status(StatusCodes.OK).json({
+    msg: 'Token successfully created.',
+    token,
+    user: { name: user.name },
+  })
 }
 
 module.exports = { login, register }

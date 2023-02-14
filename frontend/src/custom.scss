@@ -1,10 +1,19 @@
 $body-bg: rgb(30, 30, 30);
 $body-color: #fff;
+$dropdown-bg: $body-bg;
+
+.margins {
+  margin: 2rem;
+}
+
+.paddings-vert {
+  padding: 2rem 0 2rem 0;
+}
 
 .bg-form {
   background-color:rgb(60, 60, 60);
   padding: 2rem 2rem 1rem 2rem;
-  margin: 2rem;
+  margin: 2rem 1rem 2rem 0;
   border-radius: 1rem;
 }
 
@@ -12,8 +21,21 @@ $body-color: #fff;
   margin: 1rem;
 }
 
-.margin-items > * {
+.margin-items > * > div {
   margin-bottom: 1rem;
+}
+
+/* Change the color for input autocomplete */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px $body-bg inset !important;
+}
+
+/*Change text color for autocomplete */
+input:-webkit-autofill {
+  -webkit-text-fill-color: $body-color !important;
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";

@@ -1,36 +1,34 @@
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import { useRef, useState } from 'react'
 import FormGroup from './FormGroup'
-import register from '../controllers/register'
+import login from '../controllers/login'
 
 export default function () {
   const references = {
-    name: useRef(),
     email: useRef(),
     password: useRef(),
   }
 
-  const [serverAnswer, setServerAnswer] = useState('Please register.')
+  const [serverAnswer, setServerAnswer] = useState('Please login.')
 
-  function sendRegistrationRequest(e) {
+  function sendLoginRequest(e) {
     e.preventDefault()
     const req = {}
     for (const [field, ref] of Object.entries(references)) {
       req[field] = ref.current.value
     }
 
-    register(req).then((res) => setServerAnswer(res))
+    login(req).then((res) => setServerAnswer(res))
   }
 
   return (
     <div className='bg-form'>
       <Row>
-        <h3 className='text-center'>Registration form</h3>
+        <h3 className='text-center'>Login form</h3>
       </Row>
 
-      <Form className='margin-items' onSubmit={sendRegistrationRequest}>
+      <Form className='margin-items' onSubmit={sendLoginRequest}>
         <Row>
-          <FormGroup type='text' label='Username' ref={references.name} />
           <FormGroup type='email' label='Email' ref={references.email} />
           <FormGroup
             type='password'
@@ -43,7 +41,7 @@ export default function () {
           <Col>{serverAnswer}</Col>
           <Col>
             <div className='d-grid'>
-              <Button type='submit'>Register</Button>
+              <Button type='submit'>Login</Button>
             </div>
           </Col>
         </Row>
