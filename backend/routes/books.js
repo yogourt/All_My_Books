@@ -5,7 +5,7 @@ const {
   createJob,
   updateJob,
   deleteJob,
-} = require('../controllers/jobs')
+} = require('../controllers/books')
 
 const router = express.Router()
 

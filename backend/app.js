@@ -5,7 +5,7 @@ const app = express()
 const path = require('path')
 
 const authRouter = require('./routes/auth')
-const jobRouter = require('./routes/jobs')
+const jobRouter = require('./routes/books')
 const connectDB = require('./db/connect')
 
 // error handler
