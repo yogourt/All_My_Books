@@ -25,6 +25,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "swagger-ui-express": "^4.1.6",
+    "universal-cookie-express": "^4.0.3",
     "xss-clean": "^0.1.1",
     "yamljs": "^0.3.0"
   },

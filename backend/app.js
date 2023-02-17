@@ -3,6 +3,7 @@ require('express-async-errors')
 const express = require('express')
 const app = express()
 const path = require('path')
+const cookiesMiddleware = require('universal-cookie-express')
 
 const authRouter = require('./routes/auth')
 const jobRouter = require('./routes/books')
@@ -17,6 +18,7 @@ const staticDir = path.join(__dirname, '../frontend/build')
 
 app.use(express.json())
 app.use(express.static(staticDir))
+app.use(cookiesMiddleware())
 // extra packages
 
 // backend routes

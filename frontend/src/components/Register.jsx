@@ -2,6 +2,8 @@ import { Button, Col, Form, Row } from 'react-bootstrap'
 import { useRef, useState } from 'react'
 import FormGroup from './FormGroup'
 import register from '../controllers/register'
+import { useCookies } from 'react-cookie'
+import { options } from '../controllers/cookie'
 
 export default function () {
   const references = {
@@ -11,6 +13,7 @@ export default function () {
   }
 
   const [serverAnswer, setServerAnswer] = useState('Please register.')
+  const [_, setCookie] = useCookies('token')
 
   function sendRegistrationRequest(e) {
     e.preventDefault()
@@ -19,7 +22,12 @@ export default function () {
       req[field] = ref.current.value
     }
 
-    register(req).then((res) => setServerAnswer(res))
+    register(req).then((res) => {
+      setServerAnswer(res.msg)
+      if (res.token) {
+        setCookie('token', res.token, options)
+      }
+    })
   }
 
   return (

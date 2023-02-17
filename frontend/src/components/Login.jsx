@@ -2,6 +2,8 @@ import { Button, Col, Form, Row } from 'react-bootstrap'
 import { useRef, useState } from 'react'
 import FormGroup from './FormGroup'
 import login from '../controllers/login'
+import { useCookies } from 'react-cookie'
+import { options } from '../controllers/cookie'
 
 export default function () {
   const references = {
@@ -10,6 +12,7 @@ export default function () {
   }
 
   const [serverAnswer, setServerAnswer] = useState('Please login.')
+  const [_, setCookie] = useCookies('token')
 
   function sendLoginRequest(e) {
     e.preventDefault()
@@ -18,7 +21,12 @@ export default function () {
       req[field] = ref.current.value
     }
 
-    login(req).then((res) => setServerAnswer(res))
+    login(req).then((res) => {
+      setServerAnswer(res.msg)
+      if (res.token) {
+        setCookie('token', res.token, options)
+      }
+    })
   }
 
   return (

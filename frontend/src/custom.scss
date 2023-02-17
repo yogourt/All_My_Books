@@ -1,6 +1,9 @@
 $body-bg: rgb(30, 30, 30);
 $body-color: #fff;
-$dropdown-bg: $body-bg;
+
+$content-bg: rgb(60, 60, 60);
+$list-group-bg: $content-bg;
+$list-group-color: $body-color;
 
 .margins {
   margin: 2rem;
@@ -11,7 +14,7 @@ $dropdown-bg: $body-bg;
 }
 
 .bg-form {
-  background-color:rgb(60, 60, 60);
+  background-color:$content-bg;
   padding: 2rem 2rem 1rem 2rem;
   margin: 2rem 1rem 2rem 0;
   border-radius: 1rem;
@@ -23,6 +26,22 @@ $dropdown-bg: $body-bg;
 
 .margin-items > * > div {
   margin-bottom: 1rem;
+}
+
+.bg-books {
+  padding: 1rem 2rem 0 2rem;
+  margin-top: 2rem;
+}
+
+.bg-book {
+  margin: 0 0 1rem 0;
+  border-radius: 0.5rem;
+}
+
+.small-cap-text {
+  font-size: 0.7rem;
+  text-align: end;
+  font-weight: 600;
 }
 
 /* Change the color for input autocomplete */
