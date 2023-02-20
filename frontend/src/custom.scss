@@ -9,6 +9,10 @@ $list-group-color: $body-color;
   margin: 2rem;
 }
 
+.margin-start {
+  margin-left: 0.3rem;
+}
+
 .paddings-vert {
   padding: 2rem 0 2rem 0;
 }
@@ -40,7 +44,7 @@ $list-group-color: $body-color;
 
 .small-cap-text {
   font-size: 0.7rem;
-  text-align: end;
+  text-align: center;
   font-weight: 600;
 }
 

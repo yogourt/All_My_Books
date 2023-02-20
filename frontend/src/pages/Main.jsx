@@ -5,7 +5,7 @@ import Anonymous from './Anonymous'
 export default function () {
   return (
     <Container className='margins'>
-      <Books /> <Anonymous />
+      <Anonymous /> <Books />
     </Container>
   )
 }

@@ -23,7 +23,7 @@ app.use(cookiesMiddleware())
 
 // backend routes
 app.use('/api/v1/auth', authRouter)
-app.use('/api/v1/jobs', authMiddleware, jobRouter)
+app.use('/api/v1/books', authMiddleware, jobRouter)
 
 // frontend routes will be handled by react router
 app.get('*', (req, res) => {

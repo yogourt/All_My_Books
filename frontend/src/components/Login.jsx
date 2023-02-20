@@ -12,7 +12,7 @@ export default function () {
   }
 
   const [serverAnswer, setServerAnswer] = useState('Please login.')
-  const [_, setCookie] = useCookies('token')
+  const [_, setCookie] = useCookies()
 
   function sendLoginRequest(e) {
     e.preventDefault()

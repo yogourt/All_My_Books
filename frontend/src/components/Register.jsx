@@ -13,7 +13,7 @@ export default function () {
   }
 
   const [serverAnswer, setServerAnswer] = useState('Please register.')
-  const [_, setCookie] = useCookies('token')
+  const [_, setCookie] = useCookies()
 
   function sendRegistrationRequest(e) {
     e.preventDefault()
@@ -26,6 +26,7 @@ export default function () {
       setServerAnswer(res.msg)
       if (res.token) {
         setCookie('token', res.token, options)
+        window.location.reload(false)
       }
     })
   }

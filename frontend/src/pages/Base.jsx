@@ -1,5 +1,5 @@
 import { Container, Row, Col } from 'react-bootstrap'
-import BackButton from '../components/BackButton'
+import NavButton from '../components/NavButton'
 
 export default function ({ Content }) {
   return (
@@ -8,8 +8,8 @@ export default function ({ Content }) {
         <Col>
           <Row>
             <Col />
-            <Col>
-              <BackButton />
+            <Col className='paddings-vert'>
+              <NavButton link='../' name='back' />
             </Col>
           </Row>
         </Col>

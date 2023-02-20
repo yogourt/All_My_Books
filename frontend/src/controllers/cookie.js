@@ -2,5 +2,5 @@ export const options = {
   path: '/',
   sameSite: true,
   secure: true,
-  httpOnly: true,
+  maxAge: 3600 /*for testing*/,
 }
