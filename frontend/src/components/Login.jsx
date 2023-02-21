@@ -1,4 +1,5 @@
 import { Button, Col, Form, Row } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 import { useRef, useState } from 'react'
 import FormGroup from './FormGroup'
 import login from '../controllers/login'
@@ -10,6 +11,8 @@ export default function () {
     email: useRef(),
     password: useRef(),
   }
+
+  const navigate = useNavigate()
 
   const [serverAnswer, setServerAnswer] = useState('Please login.')
   const [_, setCookie] = useCookies()
@@ -25,6 +28,7 @@ export default function () {
       setServerAnswer(res.msg)
       if (res.token) {
         setCookie('token', res.token, options)
+        navigate('../')
       }
     })
   }
