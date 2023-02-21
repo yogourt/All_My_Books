@@ -1,21 +1,27 @@
-const getJobs = async (req, res) => {
-  res.send('Jobs')
+const Book = require('../models/book')
+const { StatusCodes } = require('http-status-codes')
+
+const getBooks = async (req, res) => {
+  const books = await Book.find({ userId: req.user.userId }).sort('createdAt')
+  res.status(StatusCodes.OK).json(books)
 }
 
-const getJob = async (req, res) => {
+const getBook = async (req, res) => {
   res.send('Job')
 }
 
-const createJob = async (req, res) => {
-  res.status(200).json(req.user)
+const createBook = async (req, res) => {
+  req.body.userId = req.user.userId
+  const book = await Book.create(req.body)
+  res.status(StatusCodes.CREATED).json(book)
 }
 
-const updateJob = async (req, res) => {
+const updateBook = async (req, res) => {
   res.send('updated Job')
 }
 
-const deleteJob = async (req, res) => {
+const deleteBook = async (req, res) => {
   res.send('deleted')
 }
 
-module.exports = { getJobs, getJob, createJob, updateJob, deleteJob }
+module.exports = { getBooks, getBook, createBook, updateBook, deleteBook }

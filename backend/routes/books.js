@@ -1,15 +1,15 @@
 const express = require('express')
 const {
-  getJobs,
-  getJob,
-  createJob,
-  updateJob,
-  deleteJob,
+  getBooks,
+  getBook,
+  createBook,
+  updateBook,
+  deleteBook,
 } = require('../controllers/books')
 
 const router = express.Router()
 
-router.route('/').get(getJobs).post(createJob)
-router.route('/:id').get(getJob).patch(updateJob).delete(deleteJob)
+router.route('/').get(getBooks).post(createBook)
+router.route('/:id').get(getBook).patch(updateBook).delete(deleteBook)
 
 module.exports = router
