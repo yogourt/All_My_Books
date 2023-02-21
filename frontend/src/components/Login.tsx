@@ -1,31 +1,34 @@
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import { useRef, useState } from 'react'
+import { FormEvent, useRef, useState } from 'react'
 import FormGroup from './FormGroup'
-import login from '../controllers/login'
+import auth from '../controllers/auth'
 import { useCookies } from 'react-cookie'
 import { options } from '../controllers/cookie'
 
 export default function () {
   const references = {
-    email: useRef(),
-    password: useRef(),
+    email: useRef<HTMLInputElement>(),
+    password: useRef<HTMLInputElement>(),
   }
 
   const navigate = useNavigate()
 
-  const [serverAnswer, setServerAnswer] = useState('Please login.')
+  const [errorMsg, setErrorMsg] = useState('Please login.')
   const [_, setCookie] = useCookies()
 
-  function sendLoginRequest(e) {
+  function sendLoginRequest(e: FormEvent) {
     e.preventDefault()
-    const req = {}
-    for (const [field, ref] of Object.entries(references)) {
-      req[field] = ref.current.value
+    const email = references.email.current?.value
+    const password= references.password.current?.value
+    
+    if (!email || !password) {
+      setErrorMsg('Please provide email and password.')
+      return
     }
 
-    login(req).then((res) => {
-      setServerAnswer(res.msg)
+    auth('login',{email, password}).then((res) => {
+      setErrorMsg(res.msg)
       if (res.token) {
         setCookie('token', res.token, options)
         navigate('../')
@@ -50,7 +53,7 @@ export default function () {
         </Row>
 
         <Row>
-          <Col>{serverAnswer}</Col>
+          <Col>{errorMsg}</Col>
           <Col>
             <div className='d-grid'>
               <Button type='submit'>Login</Button>

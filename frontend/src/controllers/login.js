@@ -6,4 +6,4 @@ export default (req) =>
       validateStatus: () => true,
     })
     .then((response) => response.data)
-    .catch((error) => error.message)
+    .catch((error) => ({ msg: error.message }))

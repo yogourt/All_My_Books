@@ -1,32 +1,37 @@
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import { useRef, useState } from 'react'
+import { FormEvent, useRef, useState } from 'react'
 import FormGroup from './FormGroup'
-import register from '../controllers/register'
+import auth from '../controllers/auth'
 import { useCookies } from 'react-cookie'
 import { options } from '../controllers/cookie'
 
 export default function () {
   const references = {
-    name: useRef(),
-    email: useRef(),
-    password: useRef(),
+    name: useRef<HTMLInputElement>(),
+    email: useRef<HTMLInputElement>(),
+    password: useRef<HTMLInputElement>(),
   }
 
   const navigate = useNavigate()
 
-  const [serverAnswer, setServerAnswer] = useState('Please register.')
+  const [errorMsg, setErrorMsg] = useState('Please register.')
   const [_, setCookie] = useCookies()
 
-  function sendRegistrationRequest(e) {
+  function sendRegistrationRequest(e: FormEvent) {
     e.preventDefault()
-    const req = {}
-    for (const [field, ref] of Object.entries(references)) {
-      req[field] = ref.current.value
+    const email = references.email.current?.value
+    const name = references.name.current?.value
+    const password = references.password.current?.value
+
+    if (!email|| !name || !password) {
+      console.log(email)
+      setErrorMsg('Please provide email, name and password.')
+      return
     }
 
-    register(req).then((res) => {
-      setServerAnswer(res.msg)
+    auth('register',{email, name, password}).then((res) => {
+      setErrorMsg(res.msg)
       if (res.token) {
         setCookie('token', res.token, options)
         navigate('../')
@@ -52,7 +57,7 @@ export default function () {
         </Row>
 
         <Row>
-          <Col>{serverAnswer}</Col>
+          <Col>{errorMsg}</Col>
           <Col>
             <div className='d-grid'>
               <Button type='submit'>Register</Button>
