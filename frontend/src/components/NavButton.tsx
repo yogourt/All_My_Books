@@ -1,7 +1,12 @@
 import { Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
-export default function (props) {
+interface Props {
+  link: string
+  name: string
+}
+
+function NavButton(props: Props) {
   return (
     <Link to={props.link}>
       <div className='d-grid'>
@@ -10,3 +15,5 @@ export default function (props) {
     </Link>
   )
 }
+
+export default NavButton

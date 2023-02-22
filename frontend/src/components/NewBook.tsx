@@ -6,34 +6,31 @@ import {
   FormControl,
   FormCheck,
 } from 'react-bootstrap'
-import { useState } from 'react'
-import { forwardRef } from 'react'
+import { type ChangeEvent, useState, forwardRef } from 'react'
 
-function NewBook(_, ref) {
-  const { title, author, finished } = ref
-  const [finishedState, setFinished] = useState()
+function NewBook(_: unknown, ref: React.ForwardedRef<HTMLFormElement>) {
+  const [finishedState, setFinished] = useState(false)
 
-  const changeFinishedLabel = (event) => {
+  const changeFinishedLabel = (event: ChangeEvent<HTMLInputElement>) => {
     setFinished(event.target.checked)
   }
 
   return (
     <ListGroupItem className='bg-book'>
-      <Form>
+      <Form ref={ref}>
         <Row className='align-items-center'>
           <Col>
             <b>
-              <FormControl placeholder='title' ref={title} />
+              <FormControl placeholder='title' />
             </b>
           </Col>
           <Col>
-            <FormControl placeholder='author' ref={author} />
+            <FormControl placeholder='author' />
           </Col>
           <Col sm='4' md='3' lg='2'>
             <FormCheck
               onChange={changeFinishedLabel}
               label={finishedState ? 'FINISHED' : 'NOT FINISHED'}
-              ref={finished}
               className='small-cap-text'
             />
           </Col>

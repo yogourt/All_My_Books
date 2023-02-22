@@ -2,7 +2,7 @@ import { Col, Row } from 'react-bootstrap'
 import { useCookies } from 'react-cookie'
 import ExpandedButton from '../components/NavButton'
 
-export default function () {
+function Anonymous() {
   const [cookies] = useCookies()
   if (cookies.token) return <div />
   return (
@@ -18,3 +18,5 @@ export default function () {
     </Row>
   )
 }
+
+export default Anonymous

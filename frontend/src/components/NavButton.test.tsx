@@ -7,6 +7,7 @@ const chance = new Chance()
 
 it('renders', () => {
   const name = chance.string()
-  render(<NavButton name={name} />, { wrapper: BrowserRouter })
+  const link = chance.string()
+  render(<NavButton name={name} link={link} />, { wrapper: BrowserRouter })
   fireEvent.click(screen.getByText(name))
 })

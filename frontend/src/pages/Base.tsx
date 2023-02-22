@@ -1,7 +1,11 @@
+import type { ReactElement } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import NavButton from '../components/NavButton'
 
-export default function ({ Content }) {
+interface Props {
+  Content: ReactElement
+}
+function Base({ Content }: Props) {
   return (
     <Container>
       <Row>
@@ -21,3 +25,5 @@ export default function ({ Content }) {
     </Container>
   )
 }
+
+export default Base

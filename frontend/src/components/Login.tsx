@@ -1,21 +1,21 @@
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import { FormEvent, useRef, useState } from 'react'
+import { type FormEvent, useRef, useState } from 'react'
 import FormGroup from './FormGroup'
 import auth from '../controllers/auth'
 import { useCookies } from 'react-cookie'
 import { options } from '../controllers/cookie'
 
-export default function () {
+function Login() {
   const references = {
-    email: useRef<HTMLInputElement>(),
-    password: useRef<HTMLInputElement>(),
+    email: useRef<HTMLInputElement>(null),
+    password: useRef<HTMLInputElement>(null),
   }
 
   const navigate = useNavigate()
 
   const [errorMsg, setErrorMsg] = useState('Please login.')
-  const [_, setCookie] = useCookies()
+  const setCookie = useCookies()[1]
 
   function sendLoginRequest(e: FormEvent) {
     e.preventDefault()
@@ -27,13 +27,16 @@ export default function () {
       return
     }
 
-    auth('login', { email, password }).then((res) => {
-      setErrorMsg(res.msg)
-      if (res.token) {
-        setCookie('token', res.token, options)
-        navigate('../')
-      }
-    })
+    auth('login', { email, password }).then(
+      (res) => {
+        setErrorMsg(res.msg)
+        if (res.token) {
+          setCookie('token', res.token, options)
+          navigate('../')
+        }
+      },
+      () => {}
+    )
   }
 
   return (
@@ -44,9 +47,9 @@ export default function () {
 
       <Form className='margin-items' onSubmit={sendLoginRequest}>
         <Row>
-          <FormGroup type='email' label='Email' ref={references.email} />
+          <FormGroup inputType='email' label='Email' ref={references.email} />
           <FormGroup
-            type='password'
+            inputType='password'
             label='Password'
             ref={references.password}
           />
@@ -64,3 +67,5 @@ export default function () {
     </div>
   )
 }
+
+export default Login

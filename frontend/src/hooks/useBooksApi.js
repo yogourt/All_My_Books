@@ -16,7 +16,7 @@ export default function () {
       .get(url, axiosOpts)
       .then((response) => {
         if (response.status === StatusCodes.OK) setData(response.data)
-        if (response.status == StatusCodes.UNAUTHORIZED) navigate('/')
+        if (response.status === StatusCodes.UNAUTHORIZED) navigate('/')
         else setErrorMsg(response.data.msg)
       })
       .catch((error) => {
@@ -29,8 +29,8 @@ export default function () {
     axios
       .post(url, req, axiosOpts)
       .then((response) => {
-        if (response.status == StatusCodes.CREATED) getUserBooks()
-        if (response.status == StatusCodes.UNAUTHORIZED) navigate('/')
+        if (response.status === StatusCodes.CREATED) getUserBooks()
+        if (response.status === StatusCodes.UNAUTHORIZED) navigate('/')
         else setErrorMsg(response.data.msg)
       })
       .catch((error) => {

@@ -5,24 +5,21 @@ import Book from '../components/Book'
 import NewBook from '../components/NewBook'
 import useBooksApi from '../hooks/useBooksApi'
 
-export default function () {
+function Books() {
   const [cookies] = useCookies()
   if (!cookies.token) return <div />
 
   const [userBooks, errorMsg, postBook] = useBooksApi()
 
   // new book ref
-  const references = {
-    title: useRef(),
-    author: useRef(),
-    finished: useRef(),
-  }
+  const newBookRef = useRef()
 
   function saveBook() {
+    const formInputs = newBookRef.current
     const request = {
-      title: references.title.current.value,
-      author: references.author.current.value,
-      read: references.finished.current.checked,
+      title: formInputs[0].value,
+      author: formInputs[1].value,
+      read: formInputs[2].checked,
     }
     postBook(request)
   }
@@ -33,10 +30,10 @@ export default function () {
         <Col />
         <Col className='bg-books' sm='10' md='8'>
           <ListGroup>
-            {userBooks.map((book) => (
-              <Book info={book} />
+            {userBooks.map((book, key) => (
+              <Book key={key} info={book} />
             ))}
-            <NewBook ref={references} />
+            <NewBook ref={newBookRef} />
           </ListGroup>
         </Col>
         <Col />
@@ -57,3 +54,5 @@ export default function () {
     </>
   )
 }
+
+export default Books

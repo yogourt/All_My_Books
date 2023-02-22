@@ -1,6 +1,8 @@
-import Login from '../components/Login'
+import LoginComp from '../components/Login'
 import Base from './Base'
 
-export default function () {
-  return <Base Content={<Login />}></Base>
+function Login() {
+  return <Base Content={<LoginComp />}></Base>
 }
+
+export default Login

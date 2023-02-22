@@ -8,8 +8,13 @@ interface Request {
   password: string
 }
 
-export default (method: Method, req: Request) => {
-  return axios
+interface Response {
+  msg: string
+  token?: string
+}
+
+export default async (method: Method, req: Request): Promise<Response> => {
+  return await axios
     .post('http://localhost:3000/api/v1/auth/' + method, req, {
       validateStatus: () => true,
     })
