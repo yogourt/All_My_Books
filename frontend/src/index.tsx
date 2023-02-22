@@ -10,19 +10,19 @@ import Registration from './pages/Registration'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: Main(),
+    element: Main()
   },
   {
     path: '/register',
-    element: Registration(),
+    element: Registration()
   },
   {
     path: '/login',
-    element: Login(),
-  },
+    element: Login()
+  }
 ])
 const rootElement = document.getElementById('root')
-if (!rootElement) throw Error('Root element not found.')
+if (rootElement == null) throw Error('Root element not found.')
 const root = ReactDOM.createRoot(rootElement)
 root.render(
   <CookiesProvider>

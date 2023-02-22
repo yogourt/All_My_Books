@@ -1,6 +1,8 @@
 import { Col, ListGroupItem, Row } from 'react-bootstrap'
 
-export default function ({ info }) {
+interface Props  { info: { title: string, author: string, read: string } }
+
+export default function ({ info }: Props) {
   return (
     <ListGroupItem className='bg-book'>
       <Row className='align-items-center'>
