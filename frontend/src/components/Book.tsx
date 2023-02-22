@@ -1,6 +1,8 @@
 import { Col, ListGroupItem, Row } from 'react-bootstrap'
 
-interface Props  { info: { title: string, author: string, read: string } }
+interface Props {
+  info: { title: string; author: string; read: string }
+}
 
 export default function ({ info }: Props) {
   return (

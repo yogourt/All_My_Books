@@ -20,14 +20,14 @@ export default function () {
   function sendLoginRequest(e: FormEvent) {
     e.preventDefault()
     const email = references.email.current?.value
-    const password= references.password.current?.value
-    
+    const password = references.password.current?.value
+
     if (!email || !password) {
       setErrorMsg('Please provide email and password.')
       return
     }
 
-    auth('login',{email, password}).then((res) => {
+    auth('login', { email, password }).then((res) => {
       setErrorMsg(res.msg)
       if (res.token) {
         setCookie('token', res.token, options)

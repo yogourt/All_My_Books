@@ -24,13 +24,13 @@ export default function () {
     const name = references.name.current?.value
     const password = references.password.current?.value
 
-    if (!email|| !name || !password) {
+    if (!email || !name || !password) {
       console.log(email)
       setErrorMsg('Please provide email, name and password.')
       return
     }
 
-    auth('register',{email, name, password}).then((res) => {
+    auth('register', { email, name, password }).then((res) => {
       setErrorMsg(res.msg)
       if (res.token) {
         setCookie('token', res.token, options)

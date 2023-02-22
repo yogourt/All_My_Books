@@ -18,7 +18,7 @@ $list-group-color: $body-color;
 }
 
 .bg-form {
-  background-color:$content-bg;
+  background-color: $content-bg;
   padding: 2rem 2rem 1rem 2rem;
   margin: 2rem 1rem 2rem 0;
   border-radius: 1rem;
@@ -61,5 +61,4 @@ input:-webkit-autofill {
   -webkit-text-fill-color: $body-color !important;
 }
 
-@import "../node_modules/bootstrap/scss/bootstrap";
-
+@import '../node_modules/bootstrap/scss/bootstrap';
