@@ -10,6 +10,7 @@ it('renders', () => {
     author: chance.string(),
     title: chance.string(),
     read: chance.bool(),
+    id: chance.string(),
   }
 
   render(<Book info={info} />)

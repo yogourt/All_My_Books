@@ -48,6 +48,10 @@ $list-group-color: $body-color;
   font-weight: 600;
 }
 
+.visible_bcg {
+  background-color: rgb(228, 83, 83);
+}
+
 /* Change the color for input autocomplete */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,

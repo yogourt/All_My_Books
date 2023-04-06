@@ -1,15 +1,11 @@
 import { useRef } from 'react'
-import { ListGroup, Row, Col, Button } from 'react-bootstrap'
-import { useCookies } from 'react-cookie'
+import { ListGroup, Row, Col, Button, Container } from 'react-bootstrap'
 import Book from '../components/Book'
 import NewBook from '../components/NewBook'
 import useBooksApi from '../hooks/useBooksApi'
 
 function Books() {
-  const [cookies] = useCookies()
-  if (!cookies.token) return <div />
-
-  const [userBooks, errorMsg, postBook] = useBooksApi()
+  const { userBooks, errorMsg, postBook } = useBooksApi()
 
   // new book ref
   const newBookRef = useRef()
@@ -25,7 +21,7 @@ function Books() {
   }
 
   return (
-    <>
+    <Container className='margins'>
       <Row>
         <Col />
         <Col className='bg-books' sm='10' md='8'>
@@ -51,7 +47,7 @@ function Books() {
         </Col>
         <Col />
       </Row>
-    </>
+    </Container>
   )
 }
 
