@@ -7,4 +7,5 @@ export interface Book {
 
 export interface Note {
   content: string
+  bookId: string
 }

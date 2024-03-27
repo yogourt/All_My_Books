@@ -1,4 +1,4 @@
-const Book = require('../models/book')
+const Book = require('../models/Book')
 const { StatusCodes } = require('http-status-codes')
 const { NotFoundError } = require('../errors')
 

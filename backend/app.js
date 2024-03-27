@@ -6,7 +6,7 @@ const path = require('path')
 const cookiesMiddleware = require('universal-cookie-express')
 
 const authRouter = require('./routes/auth')
-const jobRouter = require('./routes/books')
+const bookRouter = require('./routes/books')
 const connectDB = require('./db/connect')
 
 // error handler
@@ -23,7 +23,7 @@ app.use(cookiesMiddleware())
 
 // backend routes
 app.use('/api/v1/auth', authRouter)
-app.use('/api/v1/books', authMiddleware, jobRouter)
+app.use('/api/v1/books', authMiddleware, bookRouter)
 
 // frontend routes will be handled by react router
 app.get('*', (req, res) => {

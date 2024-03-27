@@ -1,12 +1,12 @@
 import { useEffect, useRef } from 'react'
 import { Button, Col, Container, ListGroup, Row } from 'react-bootstrap'
 import { useNavigate, useParams } from 'react-router-dom'
-import ErrorPage from '../pages/Error'
-import useBookApi from '../hooks/useBookApi'
+import ErrorPage from './Error'
 import useNotesApi from '../hooks/useNotesApi'
-import type { Book } from '../types'
 import Note from '../components/Note'
 import NewNote from '../components/NewNote'
+import { type Book } from '../types'
+import useBookApi from '../hooks/useBookApi'
 
 function BookDetails(props: Partial<Book>) {
   const { bookId } = useParams()
@@ -14,7 +14,7 @@ function BookDetails(props: Partial<Book>) {
 
   const navigate = useNavigate()
   const { book, errorMsg: bookErrorMsg, getBook } = useBookApi()
-  const { notes, errorMsg } = useNotesApi(bookId)
+  const { notes, errorMsg, postNote } = useNotesApi(bookId)
 
   useEffect(() => {
     if (!bookId) navigate('../')
@@ -25,10 +25,18 @@ function BookDetails(props: Partial<Book>) {
   }, [])
 
   // new note ref
-  const newNoteRef = useRef<HTMLFormElement>(null)
+  const newNoteRef = useRef<HTMLFormElement | null>(null)
 
   function saveNote() {
     console.log(newNoteRef)
+    const formInputs = newNoteRef?.current
+    if (formInputs && bookId) {
+      const request = {
+        content: (formInputs[0] as HTMLInputElement).value,
+        bookId,
+      }
+      postNote(request)
+    }
   }
 
   return bookErrorMsg ? (
