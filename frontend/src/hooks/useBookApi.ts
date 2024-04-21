@@ -3,9 +3,10 @@ import { StatusCodes } from 'http-status-codes'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { Book } from '../types'
+import { apiUrl } from './consts'
 
 const axiosOpts = { validateStatus: () => true }
-const url = 'http://localhost:3000/api/v1/books'
+const url = `${apiUrl}/books`
 
 export default function (): {
   book: Book | undefined

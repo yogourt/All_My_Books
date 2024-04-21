@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { StatusCodes } from 'http-status-codes'
 import { useNavigate } from 'react-router-dom'
 import type { Note } from '../types'
+import { apiUrl } from './consts'
 
 const axiosOpts = { validateStatus: () => true }
 
@@ -16,7 +17,7 @@ export default function (bookId: string): {
   errorMsg: string | undefined
   postNote: (req: Note) => void
 } {
-  const url = `http://localhost:3000/api/v1/books/${bookId}/notes`
+  const url = `${apiUrl}/books/${bookId}/notes`
   const [data, setData] = useState<Note[]>([])
   const [errorMsg, setErrorMsg] = useState()
   const navigate = useNavigate()
@@ -27,8 +28,8 @@ export default function (bookId: string): {
       .then((response) => {
         if (response.status === StatusCodes.OK && validateResp(response.data))
           setData(response.data)
-        if (response.status === StatusCodes.UNAUTHORIZED) navigate('/')
-        else setErrorMsg(response.data.msg)
+        // if (response.status === StatusCodes.UNAUTHORIZED) navigate('/')
+        else setErrorMsg(response.data.message)
       })
       .catch((error) => {
         setData([])

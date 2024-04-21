@@ -2,7 +2,7 @@ import { Button, Col, Form, Row } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { type FormEvent, useRef, useState } from 'react'
 import FormGroup from './FormGroup'
-import auth from '../controllers/auth'
+import { register } from '../controllers/auth'
 import { useCookies } from 'react-cookie'
 import { options } from '../controllers/cookie'
 
@@ -29,16 +29,12 @@ function Register() {
       return
     }
 
-    auth('register', { email, name, password }).then(
-      (res) => {
-        setErrorMsg(res.msg)
-        if (res.token) {
-          setCookie('token', res.token, options)
-          navigate('../')
-        }
-      },
-      () => {}
-    )
+    register(name, email, password, (err, result) => {
+      if(err) {
+        setErrorMsg(err.message)
+      }
+      else navigate('../')
+    })
   }
 
   return (

@@ -2,7 +2,7 @@ import { Button, Col, Form, Row } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { type FormEvent, useRef, useState } from 'react'
 import FormGroup from './FormGroup'
-import auth from '../controllers/auth'
+import { login } from '../controllers/auth'
 import { useCookies } from 'react-cookie'
 import { options } from '../controllers/cookie'
 
@@ -27,16 +27,14 @@ function Login() {
       return
     }
 
-    auth('login', { email, password }).then(
-      (res) => {
-        setErrorMsg(res.msg)
-        if (res.token) {
-          setCookie('token', res.token, options)
-          navigate('../')
-        }
-      },
-      () => {}
-    )
+    login(email, password, {onSuccess(result) {
+      setCookie('token', result.getIdToken().getJwtToken(), options)
+      setCookie('refreshToken', result.getRefreshToken().getToken(), options)
+      setErrorMsg(JSON.stringify(result))
+      navigate('../')
+    },onFailure(err) {
+      setErrorMsg(err.message)
+    }})
   }
 
   return (
@@ -47,7 +45,7 @@ function Login() {
 
       <Form className='margin-items' onSubmit={sendLoginRequest}>
         <Row>
-          <FormGroup inputType='email' label='Email' ref={references.email} />
+          <FormGroup inputType='text' label='Email' ref={references.email} />
           <FormGroup
             inputType='password'
             label='Password'

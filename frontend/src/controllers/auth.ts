@@ -1,25 +1,19 @@
-import axios from 'axios'
+import { clientId, userPoolId } from '../hooks/consts'
+import {AuthenticationDetails, CognitoUser, CognitoUserAttribute, CognitoUserPool} from 'amazon-cognito-identity-js'
+import type {IAuthenticationCallback, ISignUpResult, NodeCallback} from 'amazon-cognito-identity-js'
 
-type Method = 'login' | 'register'
-
-interface Request {
-  name?: string
-  email: string
-  password: string
+export function register(username: string, email: string,  password: string, callback: NodeCallback<Error, ISignUpResult>): void {
+  const userPool = new CognitoUserPool({ClientId: clientId, UserPoolId: userPoolId})
+  const userAttributes = [new CognitoUserAttribute({Name: 'email', Value: email})]
+  userPool.signUp(username, password, userAttributes, null as any, callback)
 }
 
-interface Response {
-  msg: string
-  token?: string
+export function login(username: string, password: string, callback: IAuthenticationCallback): void {
+  const userPool = new CognitoUserPool({ClientId: clientId, UserPoolId: userPoolId})
+  const user = new CognitoUser({Pool: userPool, Username: username})
+  user.authenticateUser(new AuthenticationDetails({Username: username, Password: password}), callback)
 }
 
-export default async (method: Method, req: Request): Promise<Response> => {
-  return await axios
-    .post('http://localhost:3000/api/v1/auth/' + method, req, {
-      validateStatus: () => true,
-    })
-    .then((response) => response.data)
-    .catch((error) => ({
-      msg: error.message,
-    }))
+export function refreshToken(): void {
+
 }

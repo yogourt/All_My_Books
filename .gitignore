@@ -1,3 +1,12 @@
 /node_modules
 /**/node_modules
 .env
+/backend/dist
+/backend/src/res
+/frontend/build
+/frontend/src/hooks/consts.ts
+/frontend/src/controllers/cookie.ts
+/terraform/.terraform*
+/terraform/archive
+/terraform/terraform*
+testuser.txt

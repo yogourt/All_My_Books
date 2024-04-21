@@ -1,0 +1,5 @@
+{
+    "scripts": {
+        "deploy": "cd ../backend && npm run build && cd ../terraform && terraform fmt && terraform apply --auto-approve"
+    }
+}
