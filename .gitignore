@@ -2,7 +2,7 @@
 /**/node_modules
 .env
 /backend/dist
-/backend/src/res
+/backend/res
 /frontend/build
 /frontend/src/hooks/consts.ts
 /frontend/src/controllers/cookie.ts
@@ -10,3 +10,4 @@
 /terraform/archive
 /terraform/terraform*
 testuser.txt
+/backend/src/utils/consts.ts

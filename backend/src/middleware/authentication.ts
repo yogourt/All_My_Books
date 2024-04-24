@@ -1,32 +1,26 @@
-import jwt, { JwtPayload } from 'jsonwebtoken'
 import UnauthenticatedError from '../errors/unauthenticated'
 import { NextFunction, Response, Request } from 'express'
-import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb'
-import { User } from '../models/User'
-import logger from '../utils/logger'
+import { userPoolId, clientId } from '../utils/consts'
+import { CognitoJwtVerifier } from 'aws-jwt-verify'
 
-const dbClient = new DynamoDBClient()
+const verifier = CognitoJwtVerifier.create({
+  userPoolId,
+  tokenUse: 'id',
+  clientId,
+})
 
 const authenticate = async (
-  req: Request & { universalCookies: Map<string, string>; user: any },
+  req: Request & { user: any },
   res: Response,
   next: NextFunction,
 ) => {
-  const token = req.universalCookies.get('token')
+  const token = req.headers.authorization
 
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload
-    logger.info(payload, 'Token payload')
-    const result = await dbClient.send(
-      new GetItemCommand({
-        Key: payload.userId,
-        TableName: process.env.table_users,
-      }),
-    )
-    logger.info(result, 'user from dynamodb')
-    const user = User.parse(result.Item)
-    req.user = { email: user.email, name: user.name }
+    const payload = await verifier.verify(token)
+    req.user = { email: payload.email, name: payload['cognito:username'] }
   } catch (error) {
+    console.log(error)
     throw new UnauthenticatedError('Invalid token.')
   }
   next()

@@ -4,8 +4,9 @@ import { StatusCodes } from 'http-status-codes'
 import { useNavigate } from 'react-router-dom'
 import type { Note } from '../types'
 import { apiUrl } from './consts'
+import { getToken } from '../controllers/auth'
 
-const axiosOpts = { validateStatus: () => true }
+const validateStatus = (): true => true
 
 const validateResp = (data: unknown): boolean => {
   if (!Array.isArray(data)) return false
@@ -15,20 +16,30 @@ const validateResp = (data: unknown): boolean => {
 export default function (bookId: string): {
   notes: Note[]
   errorMsg: string | undefined
-  postNote: (req: Note) => void
+  postNote: (req: Note) => Promise<void>
 } {
   const url = `${apiUrl}/books/${bookId}/notes`
   const [data, setData] = useState<Note[]>([])
   const [errorMsg, setErrorMsg] = useState()
   const navigate = useNavigate()
 
-  const getNotes = (): void => {
+  const getTokenWithErrorHandling = async (): Promise<string | undefined> => {
+    try {
+      return await getToken()
+    } catch (error) {
+      navigate('/books')
+    }
+  }
+
+  const getNotes = async (): Promise<void> => {
+    const token = await getTokenWithErrorHandling()
+    if (!token) return
+
     axios
-      .get(url, axiosOpts)
+      .get(url, { validateStatus, headers: { Authorization: token } })
       .then((response) => {
         if (response.status === StatusCodes.OK && validateResp(response.data))
           setData(response.data)
-        // if (response.status === StatusCodes.UNAUTHORIZED) navigate('/')
         else setErrorMsg(response.data.message)
       })
       .catch((error) => {
@@ -37,12 +48,13 @@ export default function (bookId: string): {
       })
   }
 
-  const postNote = (req: Note): void => {
+  const postNote = async (req: Note): Promise<void> => {
+    const token = await getTokenWithErrorHandling()
+    if (!token) return
     axios
-      .post(url, req, axiosOpts)
+      .post(url, req, { validateStatus, headers: { Authorization: token } })
       .then((response) => {
-        if (response.status === StatusCodes.CREATED) getNotes()
-        if (response.status === StatusCodes.UNAUTHORIZED) navigate('/')
+        if (response.status === StatusCodes.CREATED) void getNotes()
         else setErrorMsg(response.data.msg)
       })
       .catch((error) => {
@@ -50,7 +62,9 @@ export default function (bookId: string): {
       })
   }
 
-  useEffect(getNotes, [])
+  useEffect(() => {
+    void getNotes()
+  }, [])
 
   return { notes: data, errorMsg, postNote }
 }

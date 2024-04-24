@@ -1,16 +1,15 @@
 import { useEffect } from 'react'
 import { Col, Row, Container } from 'react-bootstrap'
-import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
 import ExpandedButton from '../components/NavButton'
 
 function Main() {
-  const [cookies] = useCookies()
   const navigate = useNavigate()
 
-  useEffect(() => (cookies.token ? navigate('/books') : undefined))
+  const hasToken = localStorage.getItem('idToken')
+  useEffect(() => (hasToken ? navigate('/books') : undefined))
 
-  return !cookies.token ? (
+  return !hasToken ? (
     <Container className='margins'>
       <Row>
         <Col />

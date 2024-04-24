@@ -4,7 +4,6 @@ import { type FormEvent, useRef, useState } from 'react'
 import FormGroup from './FormGroup'
 import { login } from '../controllers/auth'
 import { useCookies } from 'react-cookie'
-import { options } from '../controllers/cookie'
 
 function Login() {
   const references = {
@@ -27,14 +26,26 @@ function Login() {
       return
     }
 
-    login(email, password, {onSuccess(result) {
-      setCookie('token', result.getIdToken().getJwtToken(), options)
-      setCookie('refreshToken', result.getRefreshToken().getToken(), options)
-      setErrorMsg(JSON.stringify(result))
-      navigate('../')
-    },onFailure(err) {
-      setErrorMsg(err.message)
-    }})
+    login(email, password, {
+      onSuccess(result) {
+        const idToken = result.getIdToken().payload
+        localStorage.setItem('userEmail', idToken.email)
+        localStorage.setItem('username', idToken['cognito:username'])
+        localStorage.setItem('idToken', result.getIdToken().getJwtToken())
+        localStorage.setItem(
+          'refreshToken',
+          result.getRefreshToken().getToken()
+        )
+        localStorage.setItem(
+          'sessionExpiration',
+          result.getIdToken().getExpiration().toString()
+        )
+        navigate('../')
+      },
+      onFailure(err) {
+        setErrorMsg(err.message)
+      },
+    })
   }
 
   return (

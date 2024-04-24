@@ -3,8 +3,8 @@ import { getCurrentInvoke } from '@codegenie/serverless-express'
 import logger from '../utils/logger'
 
 export default function (req: Request, res: Response, next: NextFunction) {
-  const context = getCurrentInvoke().event.requestContext
+  const event = getCurrentInvoke().event
   logger.info(req, 'Request')
-  logger.info(context, 'Request context')
+  logger.info(event, 'event')
   next()
 }

@@ -30,10 +30,9 @@ function Register() {
     }
 
     register(name, email, password, (err, result) => {
-      if(err) {
+      if (err) {
         setErrorMsg(err.message)
-      }
-      else navigate('../')
+      } else navigate('../')
     })
   }
 

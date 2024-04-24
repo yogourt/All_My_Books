@@ -20,7 +20,7 @@ function BookDetails(props: Partial<Book>) {
     if (!bookId) navigate('../')
     else {
       const invalidProps = !props.title || !props.author
-      if (invalidProps) getBook(bookId)
+      if (invalidProps) void getBook(bookId)
     }
   }, [])
 
@@ -35,7 +35,7 @@ function BookDetails(props: Partial<Book>) {
         content: (formInputs[0] as HTMLInputElement).value,
         bookId,
       }
-      postNote(request)
+      void postNote(request)
     }
   }
 

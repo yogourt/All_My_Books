@@ -8,8 +8,6 @@ beforeAll(() => {
   stubs.axios_post = jest.spyOn(axios, 'post')
 })
 
-const req = { email: chance.string(), password: chance.string() }
-
 it('returns response data for login request', async () => {
   const resp = { data: chance.string() }
   stubs.axios_post.mockResolvedValue(resp)

@@ -3,8 +3,9 @@ import { useState, useEffect } from 'react'
 import { StatusCodes } from 'http-status-codes'
 import { useNavigate } from 'react-router-dom'
 import { apiUrl } from './consts'
+import { getToken } from '../controllers/auth'
 
-const axiosOpts = { validateStatus: () => true }
+const validateStatus = () => true
 
 const url = `${apiUrl}/books`
 
@@ -13,12 +14,21 @@ export default function () {
   const [errorMsg, setErrorMsg] = useState()
   const navigate = useNavigate()
 
-  const getUserBooks = () => {
+  const getTokenWithErrorHandling = async () => {
+    try {
+      return await getToken()
+    } catch (error) {
+      navigate('/')
+    }
+  }
+
+  const getUserBooks = async () => {
+    const token = await getTokenWithErrorHandling()
+    if (!token) return
     axios
-      .get(url, axiosOpts)
+      .get(url, { validateStatus, headers: { Authorization: token } })
       .then((response) => {
         if (response.status === StatusCodes.OK) setData(response.data)
-        // if (response.status === StatusCodes.UNAUTHORIZED)
         else setErrorMsg(response.data.message)
       })
       .catch((error) => {
@@ -27,20 +37,23 @@ export default function () {
       })
   }
 
-  const postBook = (req) => {
+  const postBook = async (req) => {
+    const token = await getTokenWithErrorHandling()
+    if (!token) return
     axios
-      .post(url, req, axiosOpts)
+      .post(url, req, { validateStatus, headers: { Authorization: token } })
       .then((response) => {
         if (response.status === StatusCodes.CREATED) getUserBooks()
-        if (response.status === StatusCodes.UNAUTHORIZED) navigate('/')
-        else setErrorMsg(response.data.msg)
+        setErrorMsg(response.data.message)
       })
       .catch((error) => {
         setErrorMsg(error.message)
       })
   }
 
-  useEffect(getUserBooks, [])
+  useEffect(() => {
+    getUserBooks()
+  }, [])
 
   return { userBooks: data, errorMsg, postBook }
 }
