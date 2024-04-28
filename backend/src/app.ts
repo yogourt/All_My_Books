@@ -4,7 +4,7 @@ const app = express()
 import cookiesMiddleware from 'universal-cookie-express'
 import cors from 'cors'
 
-import bookRouter from './routes/books'
+import booksRouter from './routes/books'
 
 // error handler
 import notFoundMiddleware from './middleware/not-found'
@@ -12,6 +12,8 @@ import errorHandlerMiddleware from './middleware/error-handler'
 import authenticate from './middleware/authentication'
 import logRequest from './middleware/request-logger'
 import logResponse from './interceptors/response-logger'
+import addBookId from './middleware/book-id'
+import bookRouter from './routes/book'
 
 app.use(express.json())
 app.use(
@@ -30,7 +32,8 @@ app.options('*', (_req: Request, res: Response) => {
   res.status(200).send('Options')
 })
 
-app.use('/books', authenticate, bookRouter)
+app.use('/books/:author/:title', authenticate, addBookId, bookRouter)
+app.use('/books', authenticate, booksRouter)
 
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleware)

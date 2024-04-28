@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const Note = z.object({
   content: z.string(),
-  bookId: z.number(),
+  bookId: z.string(),
   userId: z.string(),
   chapter: z.string().optional(),
   timestamp: z.number(),

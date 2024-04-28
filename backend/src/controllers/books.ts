@@ -53,30 +53,26 @@ const getBooks = async (req: Request, res: Response) => {
 }
 
 const getBook = async (req: Request, res: Response) => {
-  const {
-    params: { author, title },
-  } = req
-  const bookId = `${author}/${title}`
   const book = await client.send(
     new GetItemCommand({
       TableName: process.env.books_table,
-      Key: { bookId: { S: bookId } },
+      Key: { bookId: { S: req.bookId } },
     }),
   )
-  if (!book.Item) throw new NotFoundError(`Book with ${bookId} not found`)
+  if (!book.Item) throw new NotFoundError(`Book with ${req.bookId} not found`)
   res.status(StatusCodes.OK).json(unmarshall(book.Item))
 }
 
 const createBook = async (req: Request, res: Response) => {
   req.body.userId = req.user.name
-  req.body.bookId = `${req.body.author}/${req.body.title}`
+  req.body.bookId = req.bookId
   const book = Book.parse(req.body)
   const userBook = UserBook.parse(req.body)
 
   const result = await client.send(
     new GetItemCommand({
       TableName: process.env.books_table,
-      Key: marshall({ bookId: req.body.bookId }),
+      Key: marshall({ bookId: req.bookId }),
     }),
   )
   if (!result.Item)
