@@ -4,7 +4,6 @@ const app = express()
 import cookiesMiddleware from 'universal-cookie-express'
 import cors from 'cors'
 
-import authRouter from './routes/auth'
 import bookRouter from './routes/books'
 
 // error handler
@@ -18,7 +17,6 @@ app.use(express.json())
 app.use(
   cors({
     origin: ['https://d246way1p5c2pd.cloudfront.net', 'http://localhost:3000'],
-    acceptedHeaders: ['Authorization'],
   }),
 )
 app.use(cookiesMiddleware())
@@ -32,7 +30,6 @@ app.options('*', (_req: Request, res: Response) => {
   res.status(200).send('Options')
 })
 
-app.use('/auth', authRouter)
 app.use('/books', authenticate, bookRouter)
 
 app.use(notFoundMiddleware)

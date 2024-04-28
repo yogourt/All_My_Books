@@ -28,7 +28,7 @@ export default function () {
     axios
       .get(url, { validateStatus, headers: { Authorization: token } })
       .then((response) => {
-        if (response.status === StatusCodes.OK) setData(response.data)
+        if (response.status === StatusCodes.OK) setData(response.data || [])
         else setErrorMsg(response.data.message)
       })
       .catch((error) => {

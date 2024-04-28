@@ -15,7 +15,7 @@ function Books() {
     const request = {
       title: formInputs[0].value,
       author: formInputs[1].value,
-      read: formInputs[2].checked,
+      finished: formInputs[2].checked,
     }
     postBook(request)
   }

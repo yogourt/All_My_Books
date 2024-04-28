@@ -10,18 +10,20 @@ const verifier = CognitoJwtVerifier.create({
 })
 
 const authenticate = async (
-  req: Request & { user: any },
+  req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   const token = req.headers.authorization
+  if (!token) throw new UnauthenticatedError('Token missing')
 
   try {
     const payload = await verifier.verify(token)
-    req.user = { email: payload.email, name: payload['cognito:username'] }
+    console.log(payload)
+    req.user = { name: payload['cognito:username'] }
   } catch (error) {
     console.log(error)
-    throw new UnauthenticatedError('Invalid token.')
+    throw new UnauthenticatedError('Invalid token')
   }
   next()
 }

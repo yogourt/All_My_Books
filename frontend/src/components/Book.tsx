@@ -9,14 +9,14 @@ interface Props {
 function BookListItem({ info }: Props) {
   return (
     <ListGroupItem className='bg-book'>
-      <Link to={info.id} state={info}>
+      <Link to={info.bookId} state={info}>
         <Row className='align-items-center'>
           <Col className='margin-start'>
             <b>{info.title}</b>
           </Col>
           <Col> {info.author}</Col>
           <Col sm='4' md='2' className='small-cap-text'>
-            {info.read ? 'FINISHED' : 'NOT FINISHED'}
+            {info.finished ? 'FINISHED' : 'NOT FINISHED'}
           </Col>
         </Row>
       </Link>

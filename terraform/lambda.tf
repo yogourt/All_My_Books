@@ -8,9 +8,9 @@ resource "aws_lambda_function" "backend_lambda_proxy" {
 
   environment {
     variables = {
-      users_table : aws_dynamodb_table.users_table.name
       books_table : aws_dynamodb_table.books_table.name
       notes_table : aws_dynamodb_table.notes_table.name
+      user_books_table : aws_dynamodb_table.user_books_table.name
     }
   }
 }
@@ -66,10 +66,14 @@ data "aws_iam_policy_document" "lambda_policy" {
     effect = "Allow"
 
     actions = [
-      "dynamodb:GetItem"
+      "dynamodb:GetItem",
+      "dynamodb:Query",
+      "dynamodb:PutItem",
+      "dynamodb:Scan",
+      "dynamodb:BatchGetItem"
     ]
 
-    resources = [aws_dynamodb_table.books_table.arn, aws_dynamodb_table.notes_table.arn, aws_dynamodb_table.users_table.arn]
+    resources = [aws_dynamodb_table.books_table.arn, aws_dynamodb_table.notes_table.arn, aws_dynamodb_table.user_books_table.arn]
   }
 }
 

@@ -34,7 +34,7 @@ export default function (): {
       .get(`${url}/${id}`, { validateStatus, headers })
       .then((response) => {
         if (response.status === StatusCodes.OK) setData(response.data)
-        if (response.status === StatusCodes.NOT_FOUND)
+        else if (response.status === StatusCodes.NOT_FOUND)
           setErrorMsg('Book was not found. ')
         else setErrorMsg('Unknown error')
       })

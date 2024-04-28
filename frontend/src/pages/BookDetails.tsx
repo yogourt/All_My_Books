@@ -9,8 +9,9 @@ import { type Book } from '../types'
 import useBookApi from '../hooks/useBookApi'
 
 function BookDetails(props: Partial<Book>) {
-  const { bookId } = useParams()
-  if (!bookId) return <ErrorPage />
+  const { author, title } = useParams()
+  if (!author || !title) return <ErrorPage />
+  const bookId = `${author}/${title}`
 
   const navigate = useNavigate()
   const { book, errorMsg: bookErrorMsg, getBook } = useBookApi()

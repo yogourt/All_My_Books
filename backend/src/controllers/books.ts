@@ -1,59 +1,99 @@
 import { Book } from '../models/Book'
 import { StatusCodes } from 'http-status-codes'
 import { NotFoundError } from '../errors'
-import { Response, Request as BaseRequest } from 'express'
+import { Response, Request } from 'express'
 import {
   BatchGetItemCommand,
   DynamoDBClient,
   GetItemCommand,
-  ScanCommand,
+  PutItemCommand,
+  QueryCommand,
 } from '@aws-sdk/client-dynamodb'
-
-interface Request extends BaseRequest {
-  user: { userId: string }
-}
+import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'
+import { UserBook } from '../models/UserBook'
+import InternalServerError from '../errors/internal-server'
+import { getEnv } from '../utils/env'
 
 const client = new DynamoDBClient()
 
 const getBooks = async (req: Request, res: Response) => {
-  const result = await client.send(
-    new ScanCommand({
-      TableName: process.env.notes_table,
-      FilterExpression: `#userId = ${req.user.userId}`,
-      ProjectionExpression: 'bookId',
+  const userBooksResult = await client.send(
+    new QueryCommand({
+      TableName: process.env.user_books_table,
+      KeyConditionExpression: `userId = :userId`,
+      ExpressionAttributeValues: { ':userId': { S: req.user.name } },
     }),
   )
+  if (!userBooksResult.Items || !userBooksResult.Items.length) {
+    res.status(StatusCodes.OK).json([])
+    return
+  }
 
-  const bookIds = new Set(result.Items.map((item) => item.bookId))
-  const bookResult = await client.send(
+  const books_table = getEnv('books_table')
+
+  const booksResult = await client.send(
     new BatchGetItemCommand({
       RequestItems: {
-        [process.env.book_table]: { Keys: [...bookIds].map((id) => ({ id })) },
+        [books_table]: {
+          Keys: userBooksResult.Items.map((it) => ({ bookId: it.bookId })),
+        },
       },
     }),
   )
 
-  res.status(StatusCodes.OK).json(bookResult.Responses[process.env.book_table])
+  if (!booksResult.Responses?.[books_table])
+    throw new InternalServerError('books_table not found')
+
+  const books = booksResult.Responses?.[books_table].map((it) => unmarshall(it))
+  const userBooks = userBooksResult.Items.map((it) => unmarshall(it)).map(
+    (it) => ({ ...it, ...books.find(({ bookId }) => it.bookId === bookId) }),
+  )
+
+  res.status(StatusCodes.OK).json(userBooks)
 }
 
 const getBook = async (req: Request, res: Response) => {
   const {
-    params: { id },
+    params: { author, title },
   } = req
+  const bookId = `${author}/${title}`
   const book = await client.send(
     new GetItemCommand({
-      TableName: process.env.book_table,
-      Key: { id: { S: id } },
+      TableName: process.env.books_table,
+      Key: { bookId: { S: bookId } },
     }),
   )
-  if (!book.Item) throw new NotFoundError(`Book with ${id} is not found`)
-  res.status(StatusCodes.OK).json(book.Item)
+  if (!book.Item) throw new NotFoundError(`Book with ${bookId} not found`)
+  res.status(StatusCodes.OK).json(unmarshall(book.Item))
 }
 
 const createBook = async (req: Request, res: Response) => {
-  req.body.userId = req.user.userId
+  req.body.userId = req.user.name
+  req.body.bookId = `${req.body.author}/${req.body.title}`
   const book = Book.parse(req.body)
-  res.status(StatusCodes.CREATED).json(book)
+  const userBook = UserBook.parse(req.body)
+
+  const result = await client.send(
+    new GetItemCommand({
+      TableName: process.env.books_table,
+      Key: marshall({ bookId: req.body.bookId }),
+    }),
+  )
+  if (!result.Item)
+    await client.send(
+      new PutItemCommand({
+        TableName: process.env.books_table,
+        Item: marshall(book),
+      }),
+    )
+
+  await client.send(
+    new PutItemCommand({
+      TableName: process.env.user_books_table,
+      Item: marshall(userBook),
+    }),
+  )
+  res.status(StatusCodes.CREATED).json(userBook)
 }
 
 const updateBook = async (req: Request, res: Response) => {

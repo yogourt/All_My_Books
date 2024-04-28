@@ -9,8 +9,8 @@ it('renders', () => {
   const info = {
     author: chance.string(),
     title: chance.string(),
-    read: chance.bool(),
-    id: chance.string(),
+    finished: chance.bool(),
+    bookId: chance.string(),
   }
 
   render(<Book info={info} />)
@@ -18,6 +18,6 @@ it('renders', () => {
   expect(screen.getByText(info.author)).toBeInTheDocument()
   expect(screen.getByText(info.title)).toBeInTheDocument()
   expect(
-    screen.getByText(info.read ? 'FINISHED' : 'NOT FINISHED')
+    screen.getByText(info.finished ? 'FINISHED' : 'NOT FINISHED')
   ).toBeInTheDocument()
 })

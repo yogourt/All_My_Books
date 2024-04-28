@@ -1,8 +1,8 @@
 export interface Book {
-  id: string
+  bookId: string
   author: string
   title: string
-  read: boolean
+  finished: boolean
 }
 
 export interface Note {

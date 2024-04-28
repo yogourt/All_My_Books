@@ -15,7 +15,7 @@ const Router = () => (
     <Route path='/register' element={<Register />} />{' '}
     <Route path='/books'>
       <Route index={true} element={<Books />} />
-      <Route path=':bookId' element={<BookDetails />} />
+      <Route path=':author/:title' element={<BookDetails />} />
     </Route>
   </Routes>
 )
