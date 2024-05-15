@@ -3,9 +3,10 @@ import { ListGroup, Row, Col, Button, Container } from 'react-bootstrap'
 import Book from '../components/Book'
 import NewBook from '../components/NewBook'
 import useBooksApi from '../hooks/useBooksApi'
+import LoadingIndicator from '../components/LoadingIndicator'
 
 function Books() {
-  const { userBooks, errorMsg, postBook } = useBooksApi()
+  const { userBooks, errorMsg, postBook, isLoading } = useBooksApi()
 
   // new book ref
   const newBookRef = useRef()
@@ -25,12 +26,13 @@ function Books() {
       <Row>
         <Col />
         <Col className='bg-books' sm='10' md='8'>
-          <ListGroup>
+          {isLoading? <LoadingIndicator/> : (<ListGroup>
             {userBooks.map((book, key) => (
               <Book key={key} info={book} />
             ))}
             <NewBook ref={newBookRef} />
           </ListGroup>
+          )}
         </Col>
         <Col />
       </Row>

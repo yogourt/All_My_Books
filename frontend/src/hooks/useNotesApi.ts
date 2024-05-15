@@ -17,10 +17,12 @@ export default function (bookId: string): {
   notes: Note[]
   errorMsg: string | undefined
   postNote: (req: Note) => Promise<void>
+  isLoading: boolean
 } {
   const url = `${apiUrl}/books/${bookId}/notes`
   const [data, setData] = useState<Note[]>([])
   const [errorMsg, setErrorMsg] = useState()
+  const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
 
   const getTokenWithErrorHandling = async (): Promise<string | undefined> => {
@@ -32,6 +34,7 @@ export default function (bookId: string): {
   }
 
   const getNotes = async (): Promise<void> => {
+    setIsLoading(true)
     const token = await getTokenWithErrorHandling()
     if (!token) return
 
@@ -41,10 +44,12 @@ export default function (bookId: string): {
         if (response.status === StatusCodes.OK && validateResp(response.data))
           setData(response.data)
         else setErrorMsg(response.data.message)
+        setIsLoading(false)
       })
       .catch((error) => {
         setData([])
         setErrorMsg(error.message)
+        setIsLoading(false)
       })
   }
 
@@ -66,5 +71,5 @@ export default function (bookId: string): {
     void getNotes()
   }, [])
 
-  return { notes: data, errorMsg, postNote }
+  return { notes: data, errorMsg, postNote, isLoading }
 }

@@ -6,7 +6,7 @@ interface Props {
 }
 
 function NoteListItem({ info }: Props) {
-  return <ListGroupItem className='bg-book'>{info.content}</ListGroupItem>
+  return <ListGroupItem className='bg-book'><p className='wrap-line'>{info.content}</p></ListGroupItem>
 }
 
 export default NoteListItem

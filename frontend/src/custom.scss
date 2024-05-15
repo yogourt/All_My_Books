@@ -65,4 +65,13 @@ input:-webkit-autofill {
   -webkit-text-fill-color: $body-color !important;
 }
 
+.natural-link {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.wrap-line {
+ white-space: pre-wrap;
+}
+
 @import '../node_modules/bootstrap/scss/bootstrap';

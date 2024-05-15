@@ -2,7 +2,6 @@ import { Note } from '../models/Note'
 import { StatusCodes } from 'http-status-codes'
 import { Response, Request } from 'express'
 import {
-  BatchGetItemCommand,
   DynamoDBClient,
   PutItemCommand,
   ScanCommand,

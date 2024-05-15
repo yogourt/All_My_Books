@@ -13,6 +13,7 @@ export default function () {
   const [data, setData] = useState([])
   const [errorMsg, setErrorMsg] = useState()
   const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(true)
 
   const getTokenWithErrorHandling = async () => {
     try {
@@ -23,6 +24,7 @@ export default function () {
   }
 
   const getUserBooks = async () => {
+    setIsLoading(true)
     const token = await getTokenWithErrorHandling()
     if (!token) return
     axios
@@ -30,10 +32,12 @@ export default function () {
       .then((response) => {
         if (response.status === StatusCodes.OK) setData(response.data || [])
         else setErrorMsg(response.data.message)
+      setIsLoading(false)
       })
       .catch((error) => {
         setData([])
         setErrorMsg(error.message)
+        setIsLoading(false)
       })
   }
 
@@ -55,5 +59,5 @@ export default function () {
     getUserBooks()
   }, [])
 
-  return { userBooks: data, errorMsg, postBook }
+  return { userBooks: data, errorMsg, postBook, isLoading }
 }

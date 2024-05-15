@@ -27,6 +27,11 @@ resource "aws_dynamodb_table" "user_books_table" {
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "userId"
   range_key    = "bookId"
+  local_secondary_index {
+    name            = "user_books_by_timestamp"
+    range_key       = "timestamp"
+    projection_type = "ALL"
+  }
   attribute {
     name = "userId"
     type = "S"
@@ -34,6 +39,10 @@ resource "aws_dynamodb_table" "user_books_table" {
   attribute {
     name = "bookId"
     type = "S"
+  }
+  attribute {
+    name = "timestamp"
+    type = "N"
   }
 }
 

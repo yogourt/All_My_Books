@@ -1,0 +1,4 @@
+timestamp do user book -- done
+usuwanie dodanej notatki z text boxa -- przestał się pojawiać
+nowe linijki w notatkach się nie pojawiają -- done
+taby w notatkach

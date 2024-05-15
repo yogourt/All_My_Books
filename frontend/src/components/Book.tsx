@@ -9,7 +9,7 @@ interface Props {
 function BookListItem({ info }: Props) {
   return (
     <ListGroupItem className='bg-book'>
-      <Link to={info.bookId} state={info}>
+      <Link to={info.bookId} state={info}  className='natural-link'>
         <Row className='align-items-center'>
           <Col className='margin-start'>
             <b>{info.title}</b>

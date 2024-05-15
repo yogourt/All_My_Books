@@ -73,7 +73,11 @@ data "aws_iam_policy_document" "lambda_policy" {
       "dynamodb:BatchGetItem"
     ]
 
-    resources = [aws_dynamodb_table.books_table.arn, aws_dynamodb_table.notes_table.arn, aws_dynamodb_table.user_books_table.arn]
+    resources = [
+      aws_dynamodb_table.books_table.arn,
+      aws_dynamodb_table.notes_table.arn,
+      "${aws_dynamodb_table.user_books_table.arn}*"
+    ]
   }
 }
 
