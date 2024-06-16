@@ -32,7 +32,7 @@ export default function () {
       .then((response) => {
         if (response.status === StatusCodes.OK) setData(response.data || [])
         else setErrorMsg(response.data.message)
-      setIsLoading(false)
+        setIsLoading(false)
       })
       .catch((error) => {
         setData([])

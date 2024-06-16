@@ -4,7 +4,8 @@ import { Response, Request } from 'express'
 import {
   DynamoDBClient,
   PutItemCommand,
-  ScanCommand,
+  QueryCommand,
+  UpdateItemCommand,
 } from '@aws-sdk/client-dynamodb'
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'
 import { getEnv } from '../utils/env'
@@ -13,14 +14,18 @@ const client = new DynamoDBClient()
 
 const getNotes = async (req: Request, res: Response) => {
   const result = await client.send(
-    new ScanCommand({
+    new QueryCommand({
       TableName: process.env.notes_table,
-      FilterExpression: 'userId = :userId AND bookId = :bookId',
+      KeyConditionExpression: 'userId = :userId',
+      FilterExpression: 'bookId = :bookId',
       ExpressionAttributeValues: {
         ':userId': { S: req.user.name },
         ':bookId': { S: req.bookId },
       },
-      ProjectionExpression: 'content, chapter',
+      ExpressionAttributeNames: {
+        '#timestamp': 'timestamp',
+      },
+      ProjectionExpression: 'content, chapter, #timestamp',
     }),
   )
   res
@@ -43,4 +48,20 @@ const createNote = async (req: Request, res: Response) => {
   res.status(StatusCodes.CREATED).json(note)
 }
 
-export { getNotes, createNote }
+const updateNote = async (req: Request, res: Response) => {
+  req.body.userId = req.user.name
+  req.body.bookId = req.bookId
+
+  const note = Note.parse(req.body)
+  await client.send(
+    new UpdateItemCommand({
+      TableName: getEnv('notes_table'),
+      Key: marshall({ userId: note.userId, timestamp: note.timestamp }),
+      AttributeUpdates: { content: { Value: { S: note.content } } },
+    }),
+  )
+
+  res.status(StatusCodes.OK).json(note)
+}
+
+export { getNotes, createNote, updateNote }

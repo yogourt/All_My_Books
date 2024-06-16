@@ -26,12 +26,15 @@ function Books() {
       <Row>
         <Col />
         <Col className='bg-books' sm='10' md='8'>
-          {isLoading? <LoadingIndicator/> : (<ListGroup>
-            {userBooks.map((book, key) => (
-              <Book key={key} info={book} />
-            ))}
-            <NewBook ref={newBookRef} />
-          </ListGroup>
+          {isLoading ? (
+            <LoadingIndicator />
+          ) : (
+            <ListGroup>
+              {userBooks.map((book, key) => (
+                <Book key={key} info={book} />
+              ))}
+              <NewBook ref={newBookRef} />
+            </ListGroup>
           )}
         </Col>
         <Col />

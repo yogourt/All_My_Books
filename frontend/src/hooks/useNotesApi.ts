@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { StatusCodes } from 'http-status-codes'
 import { useNavigate } from 'react-router-dom'
-import type { Note } from '../types'
+import type { NewNote, Note } from '../types'
 import { apiUrl } from './consts'
 import { getToken } from '../controllers/auth'
 
@@ -16,7 +16,8 @@ const validateResp = (data: unknown): boolean => {
 export default function (bookId: string): {
   notes: Note[]
   errorMsg: string | undefined
-  postNote: (req: Note) => Promise<void>
+  postNote: (req: NewNote) => Promise<void>
+  updateNote: (req: Note) => Promise<void>
   isLoading: boolean
 } {
   const url = `${apiUrl}/books/${bookId}/notes`
@@ -53,7 +54,7 @@ export default function (bookId: string): {
       })
   }
 
-  const postNote = async (req: Note): Promise<void> => {
+  const postNote = async (req: NewNote): Promise<void> => {
     const token = await getTokenWithErrorHandling()
     if (!token) return
     axios
@@ -67,9 +68,22 @@ export default function (bookId: string): {
       })
   }
 
+  const updateNote = async (req: Note): Promise<void> => {
+    const token = await getTokenWithErrorHandling()
+    if (!token) return
+    axios
+      .put(url, req, { validateStatus, headers: { Authorization: token } })
+      .then((response) => {
+        if (response.status !== StatusCodes.OK) setErrorMsg(response.data.msg)
+      })
+      .catch((error) => {
+        setErrorMsg(error.message)
+      })
+  }
+
   useEffect(() => {
     void getNotes()
   }, [])
 
-  return { notes: data, errorMsg, postNote, isLoading }
+  return { notes: data, errorMsg, postNote, isLoading, updateNote }
 }

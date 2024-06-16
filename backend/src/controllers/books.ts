@@ -22,7 +22,7 @@ const getBooks = async (req: Request, res: Response) => {
       TableName: process.env.user_books_table,
       KeyConditionExpression: `userId = :userId`,
       ExpressionAttributeValues: { ':userId': { S: req.user.name } },
-      IndexName: 'user_books_by_timestamp'
+      IndexName: 'user_books_by_timestamp',
     }),
   )
   if (!userBooksResult.Items || !userBooksResult.Items.length) {

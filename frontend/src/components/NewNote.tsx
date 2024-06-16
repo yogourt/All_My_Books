@@ -1,7 +1,7 @@
 import { Form, ListGroupItem, FormControl } from 'react-bootstrap'
 import { forwardRef } from 'react'
 
-function NewNote(_: unknown, ref: React.ForwardedRef<HTMLFormElement>) {
+function NewNote(props: unknown, ref: React.ForwardedRef<HTMLFormElement>) {
   return (
     <ListGroupItem className='bg-book'>
       <Form ref={ref}>

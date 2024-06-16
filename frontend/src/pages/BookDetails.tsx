@@ -11,18 +11,18 @@ import LoadingIndicator from '../components/LoadingIndicator'
 
 function BookDetails() {
   const { author, title } = useParams()
-  const { state } = useLocation();
+  const { state } = useLocation()
   if (!author || !title) return <ErrorPage />
   const bookId = `${author}/${title}`
 
   const { book, errorMsg: bookErrorMsg, getBook } = useBookApi()
-  const { notes, errorMsg, postNote, isLoading } = useNotesApi(bookId)
+  const { notes, errorMsg, postNote, updateNote, isLoading } =
+    useNotesApi(bookId)
 
   useEffect(() => {
-      const invalidProps = !state?.title || !state?.author
-      if (invalidProps) void getBook(bookId)
+    const invalidProps = !state?.title || !state?.author
+    if (invalidProps) void getBook(bookId)
   }, [])
-
 
   // new note ref
   const newNoteRef = useRef<HTMLFormElement | null>(null)
@@ -54,17 +54,19 @@ function BookDetails() {
         </Col>
         <Col />
       </Row>
-      <Row> 
+      <Row>
         <Col />
         <Col className='bg-books' sm='10' md='8'>
-      {isLoading?  <LoadingIndicator/>  : (
-          <ListGroup>
-            {notes.map((note, key) => (
-              <Note key={key} info={note} />
-            ))}
-            <NewNote ref={newNoteRef} />
-          </ListGroup>  
-      )}
+          {isLoading ? (
+            <LoadingIndicator />
+          ) : (
+            <ListGroup>
+              {notes.map((note, key) => (
+                <Note key={key} info={note} updateNote={updateNote} />
+              ))}
+              <NewNote ref={newNoteRef} />
+            </ListGroup>
+          )}
         </Col>
         <Col />
       </Row>
@@ -80,7 +82,6 @@ function BookDetails() {
         </Col>
         <Col />
       </Row>
- 
     </Container>
   )
 }

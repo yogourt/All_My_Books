@@ -70,7 +70,9 @@ data "aws_iam_policy_document" "lambda_policy" {
       "dynamodb:Query",
       "dynamodb:PutItem",
       "dynamodb:Scan",
-      "dynamodb:BatchGetItem"
+      "dynamodb:BatchGetItem",
+      "dynamodb:UpdateItem",
+      "dynamodb:DeleteItem"
     ]
 
     resources = [

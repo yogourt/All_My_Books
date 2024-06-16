@@ -71,7 +71,11 @@ input:-webkit-autofill {
 }
 
 .wrap-line {
- white-space: pre-wrap;
+  white-space: pre-wrap;
+}
+
+.align-end {
+  text-align: 'end';
 }
 
 @import '../node_modules/bootstrap/scss/bootstrap';
